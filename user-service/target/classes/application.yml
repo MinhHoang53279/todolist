@@ -1,0 +1,46 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: user-service
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: user-service
+      # Thêm username/password nếu MongoDB yêu cầu xác thực
+      # username: MinhHoang
+      # password: <YOUR_MONGODB_PASSWORD>
+      # authentication-database: admin # Chỉ dùng nếu user được tạo trong db admin
+      auto-index-creation: true
+
+eureka:
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka/} # Sử dụng biến môi trường hoặc default
+  instance:
+    preferIpAddress: true # Quan trọng cho môi trường container/cloud
+    # hostname: localhost # Thường không cần nếu preferIpAddress=true
+
+jwt:
+  # Nên đặt secret này vào biến môi trường thay vì để trong file config
+  secret: ${JWT_SECRET:ThisIsAReallyLongAndSecureSecretKeyForJWTEncodingDecodingPleaseChangeThis}
+  expiration: ${JWT_EXPIRATION:86400000} # 24 hours default
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info" # Chỉ expose health và info cho an toàn
+  endpoint:
+    health:
+      show-details: when-authorized # Hoặc always nếu cần debug, nhưng kém an toàn
+
+logging:
+  level:
+    com.todoapp.user: DEBUG # Tăng log level để debug nếu cần
+    org.springframework.security: INFO
+    org.springframework.data.mongodb: INFO 
